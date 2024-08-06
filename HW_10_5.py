@@ -1,12 +1,9 @@
 import multiprocessing
 class WarehouseManager():
-#    data = {}
-    def __init__(self):
-        super().__init__()
-#        self.name = name
-#        self.action = action
-#        self.how_mach = how_mach
-        self.data = {}
+    data = {}
+#    def __init__(self):
+#        super().__init__()
+
     def run(self, requests):
         with multiprocessing.Pool(4) as pool:
              self.data = pool.map(self.process_request, requests)
@@ -33,7 +30,6 @@ if __name__ == '__main__':
     # Множество запросов на изменение данных о складских запасах
     requests = [
         ("product1", "receipt", 100),
-        ("product1", "receipt", 400),
         ("product2", "receipt", 150),
         ("product1", "shipment", 30),
         ("product3", "receipt", 200),
