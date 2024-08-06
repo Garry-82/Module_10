@@ -9,20 +9,21 @@ class WarehouseManager():
         self.data = {}
     def run(self, requests):
         with multiprocessing.Pool(4) as pool:
-             pool.map(self.process_request, requests)
+             self.data = pool.map(self.process_request, requests)
     def process_request(self, request):
         if request[1] == "receipt":  #  -  пополнение товара на склад
-            if request[0] in self.data.keys():
+            if request[0] in self.data:
                 self.data[request[0]] += request[2]
             if request[0] not in self.data:
                 self.data[request[0]] = request[2]
+            return self.data
 
-        if request[1] == "shipment":  #  -  отгрузка товара со склада
+        elif request[1] == "shipment":  #  -  отгрузка товара со склада
             if request[0] in self.data:
                 self.data[request[0]] -= request[2]
             if request[0] not in self.data:
                 print(f"Товар {request[0]} отсутстует на складе!! Его отгрузка невозможна!!")
-
+            return self.data
 
 if __name__ == '__main__':
     # Создаем менеджера склада
@@ -32,6 +33,7 @@ if __name__ == '__main__':
     # Множество запросов на изменение данных о складских запасах
     requests = [
         ("product1", "receipt", 100),
+        ("product1", "receipt", 400),
         ("product2", "receipt", 150),
         ("product1", "shipment", 30),
         ("product3", "receipt", 200),
